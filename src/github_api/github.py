@@ -20,6 +20,12 @@ class Release:
 
 
 @dataclass
+class Tag:
+    node_id: str
+    name: str
+
+
+@dataclass
 class Repository(ConnectedObject):
     owner: str
     name: str
@@ -40,6 +46,24 @@ class Repository(ConnectedObject):
                 name=release['name'],
                 tag_name=release['tag_name']
             ) for release in releases
+        ]
+
+        # Return it
+        return resources
+
+    def get_tags(self) -> List[Release]:
+        """ Method to get the releases for this specific repo """
+
+        tags = self._github_connection.api_call(
+            f'repos/{self.owner}/{self.name}/tags'
+        ).json()
+
+        # Convert it to 'Tag' objects
+        resources = [
+            Tag(
+                node_id=tag['node_id'],
+                name=tag['name']
+            ) for tag in tags
         ]
 
         # Return it

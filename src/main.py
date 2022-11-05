@@ -6,7 +6,8 @@ if __name__ == '__main__':
         api_key='')
 
     # Repository
-    repo = gh.get_repository('netbox-community', 'netbox')
+    repo = gh.get_repository('isc-projects', 'bind9')
 
     # Releases
     releases = repo.get_releases()
+    tags = repo.get_tags()

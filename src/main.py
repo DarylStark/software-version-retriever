@@ -103,7 +103,8 @@ if __name__ == '__main__':
             version.name,
             version.running_version,
             version.desired_version,
-            "Up-to-date" if version.is_up_to_date() else "Needs update"
+            "[green]Up-to-date[/green]" if version.is_up_to_date(
+            ) else "[yellow]Needs to be updated[/yellow]"
         )
 
     # Print the table

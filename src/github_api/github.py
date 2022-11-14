@@ -55,7 +55,7 @@ class Repository(ConnectedObject):
         """ Method to get the releases for this specific repo """
 
         tags = self._github_connection.api_call(
-            f'repos/{self.owner}/{self.name}/tags'
+            f'repos/{self.owner}/{self.name}/tags?per_page=100'
         ).json()
 
         # Convert it to 'Tag' objects

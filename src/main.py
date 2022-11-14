@@ -16,6 +16,8 @@ class SoftwareVersion:
     desired_version: str
 
     def is_up_to_date(self) -> bool:
+        if self.running_version is None or self.desired_version is None:
+            return False
         return self.running_version == self.desired_version
 
 
@@ -37,7 +39,11 @@ def retrieve_software_version(name: str, configuration: dict) -> Optional[str]:
     if configuration['type'] in checkers.keys():
         cv = checkers[configuration['type']](**configuration['configuration'])
 
-    return cv.retrieve_version()
+    if cv:
+        return cv.retrieve_version()
+
+    logger.warning(f'Checker "{configuration["type"]}" is not defined')
+    return None
 
 
 def process_application(name: str, configuration: dict) -> SoftwareVersion:

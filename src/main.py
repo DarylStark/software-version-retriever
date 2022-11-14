@@ -1,26 +1,46 @@
 import yaml
 import logging
 from rich.logging import RichHandler
+from rich.console import Console
+from rich.table import Table
 from typing import Optional
+from dataclasses import dataclass
 
-from version_checker import RestAPIJSONVersionChecker
+from version_checker import VersionChecker, RestAPIJSONVersionChecker, GitHubReleaseVersionChecker
 
 
-def retrieve_current_version(name: str, configuration: dict) -> Optional[str]:
+@dataclass
+class SoftwareVersion:
+    name: str
+    running_version: str
+    desired_version: str
+
+    def is_up_to_date(self) -> bool:
+        return self.running_version == self.desired_version
+
+
+def retrieve_software_version(name: str, configuration: dict) -> Optional[str]:
     """ Method to retrieve a specific current version """
     logger = logging.getLogger(f'CurrentVersion_{name}')
     logger.info(f'Checking current software version for "{name}"')
 
+    # Object for the checker
+    cv: Optional[VersionChecker] = None
+
+    # Define checkers
+    checkers = {
+        'rest-api-json': RestAPIJSONVersionChecker,
+        'github-release': GitHubReleaseVersionChecker,
+    }
+
     # Start the correct 'check type'
-    if configuration['type'] == 'rest-api-json':
-        logger.info('Handing check off to RestAPIJSON checker')
-        cv = RestAPIJSONVersionChecker(**configuration['configuration'])
-        return cv.retrieve_version()
+    if configuration['type'] in checkers.keys():
+        cv = checkers[configuration['type']](**configuration['configuration'])
 
-    return
+    return cv.retrieve_version()
 
 
-def process_application(name: str, configuration: dict) -> None:
+def process_application(name: str, configuration: dict) -> SoftwareVersion:
     """ Method to process a application """
 
     # Logger for this process
@@ -28,10 +48,21 @@ def process_application(name: str, configuration: dict) -> None:
     logger.info(f'Processing "{name}"')
 
     # Retrieve the current version
-    current_version = retrieve_current_version(
+    logger.info('Retrieving running software version')
+    running_version = retrieve_software_version(
         name,
         configuration['current_version'])
-    print()
+    logger.info('Retrieving desired software version')
+    latest_version = retrieve_software_version(
+        name,
+        configuration['desired_version'])
+
+    # Create a SoftwareVersion object and return it
+    return SoftwareVersion(
+        name=name,
+        running_version=running_version,
+        desired_version=latest_version
+    )
 
 
 if __name__ == '__main__':
@@ -44,6 +75,9 @@ if __name__ == '__main__':
         handlers=[RichHandler()]
     )
 
+    # Create a Rich Console
+    console = Console()
+
     # Logger for the main thread
     logger = logging.getLogger('Main')
 
@@ -55,6 +89,22 @@ if __name__ == '__main__':
         configuration = yaml.load(configuration_file, Loader=yaml.FullLoader)
     logger.info('Configuration loaded')
 
+    # Create a Rich Table
+    table = Table()
+    table.add_column('Name')
+    table.add_column('Running version')
+    table.add_column('Desired version')
+    table.add_column('Status')
+
     # Loop through the configured applications and handle them
     for name, config in configuration['checks'].items():
-        process_application(name, config)
+        version = process_application(name, config)
+        table.add_row(
+            version.name,
+            version.running_version,
+            version.desired_version,
+            "Up-to-date" if version.is_up_to_date() else "Needs update"
+        )
+
+    # Print the table
+    console.print(table)

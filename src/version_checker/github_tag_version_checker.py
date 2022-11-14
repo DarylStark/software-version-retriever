@@ -5,8 +5,8 @@ from typing import Optional
 from github_api import GitHub
 
 
-class GitHubReleaseVersionChecker(GitHubVersionChecker):
-    """ Version Checker to use GitHub releases """
+class GitHubTagVersionChecker(GitHubVersionChecker):
+    """ Version Checker to use GitHub tags """
 
     def __init__(self,
                  name_regex: Optional[str] = None,
@@ -19,16 +19,16 @@ class GitHubReleaseVersionChecker(GitHubVersionChecker):
         """ Retrieve the version """
 
         # Get the releases
-        releases = self.repository_object.get_releases()
+        tags = self.repository_object.get_tags()
 
         # Get the latests release-name
-        latest_release_name = releases[0].name
+        latest_tag_name = tags[0].name
 
         # Run the regex
         if self.name_regex:
-            matches = re.findall(self.name_regex, latest_release_name)
+            matches = re.findall(self.name_regex, latest_tag_name)
             if len(matches) == 1:
-                latest_release_name = matches[0]
+                latest_tag_name = matches[0]
 
         # Return the version
-        return latest_release_name
+        return latest_tag_name

@@ -105,14 +105,15 @@ if __name__ == '__main__':
 
     # Loop through the configured applications and handle them
     for name, config in configuration['checks'].items():
-        version = process_application(config['name'], config)
-        table.add_row(
-            version.name,
-            version.running_version,
-            version.desired_version,
-            "[green]Up-to-date[/green]" if version.is_up_to_date(
-            ) else "[yellow]Needs to be updated[/yellow]"
-        )
+        if config:
+            version = process_application(config['name'], config)
+            table.add_row(
+                version.name,
+                version.running_version,
+                version.desired_version,
+                "[green]Up-to-date[/green]" if version.is_up_to_date(
+                ) else "[yellow]Needs to be updated[/yellow]"
+            )
 
     # Print the table
     console.print(table)

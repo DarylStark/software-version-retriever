@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
     # Loop through the configured applications and handle them
     for name, config in configuration['checks'].items():
-        version = process_application(name, config)
+        version = process_application(config['name'], config)
         table.add_row(
             version.name,
             version.running_version,

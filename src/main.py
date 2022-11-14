@@ -6,7 +6,11 @@ from rich.table import Table
 from typing import Optional
 from dataclasses import dataclass
 
-from version_checker import VersionChecker, RestAPIJSONVersionChecker, GitHubReleaseVersionChecker, GitHubTagVersionChecker
+from version_checker import (VersionChecker,
+                             RestAPIJSONVersionChecker,
+                             GitHubReleaseVersionChecker,
+                             GitHubTagVersionChecker,
+                             ShellCommandVersionChecker)
 
 
 @dataclass
@@ -34,6 +38,7 @@ def retrieve_software_version(name: str, configuration: dict) -> Optional[str]:
         'rest-api-json': RestAPIJSONVersionChecker,
         'github-release': GitHubReleaseVersionChecker,
         'github-tag': GitHubTagVersionChecker,
+        'shell-command': ShellCommandVersionChecker
     }
 
     # Start the correct 'check type'

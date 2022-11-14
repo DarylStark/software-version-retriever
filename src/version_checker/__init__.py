@@ -9,3 +9,6 @@ from .restapi_json_version_checker import RestAPIJSONVersionChecker
 from .github_version_checker import GitHubVersionChecker
 from .github_release_version_checker import GitHubReleaseVersionChecker
 from .github_tag_version_checker import GitHubTagVersionChecker
+
+# Classes to retrieve from shell commands
+from .shell_command_version_checker import ShellCommandVersionChecker

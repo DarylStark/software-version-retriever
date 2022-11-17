@@ -8,7 +8,7 @@ class SSHCommandVersionChecker(ShellCommandVersionChecker):
     def __init__(self,
                  remote_server: str,
                  username: str,
-                 identity_file: str = None,
+                 identity_file: Optional[str] = None,
                  timeout: int = 10,
                  **kwargs) -> None:
         """ Set configuration values """

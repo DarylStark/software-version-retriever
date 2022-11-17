@@ -10,7 +10,8 @@ from version_checker import (VersionChecker,
                              RestAPIJSONVersionChecker,
                              GitHubReleaseVersionChecker,
                              GitHubTagVersionChecker,
-                             ShellCommandVersionChecker)
+                             ShellCommandVersionChecker,
+                             SSHCommandVersionChecker)
 
 
 @dataclass
@@ -38,7 +39,8 @@ def retrieve_software_version(name: str, configuration: dict) -> Optional[str]:
         'rest-api-json': RestAPIJSONVersionChecker,
         'github-release': GitHubReleaseVersionChecker,
         'github-tag': GitHubTagVersionChecker,
-        'shell-command': ShellCommandVersionChecker
+        'shell-command': ShellCommandVersionChecker,
+        'ssh-command': SSHCommandVersionChecker
     }
 
     # Start the correct 'check type'

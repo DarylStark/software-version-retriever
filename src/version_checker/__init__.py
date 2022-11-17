@@ -12,3 +12,4 @@ from .github_tag_version_checker import GitHubTagVersionChecker
 
 # Classes to retrieve from shell commands
 from .shell_command_version_checker import ShellCommandVersionChecker
+from .ssh_command_version_checker import SSHCommandVersionChecker

@@ -15,8 +15,6 @@ class RestAPIVersionChecker(VersionChecker):
                  authentication: Optional[dict] = None,
                  extra_headers: Optional[dict] = None) -> None:
         """ Set configuration values """
-        super().__init__()
-
         self.method = method
         self.https = https
         self.server = server

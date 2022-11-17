@@ -1,10 +1,10 @@
 import subprocess
-from .github_version_checker import GitHubVersionChecker
+from .version_checker import VersionChecker
 from typing import Optional
 import re
 
 
-class ShellCommandVersionChecker(GitHubVersionChecker):
+class ShellCommandVersionChecker(VersionChecker):
     """ Version Checker for shell commands """
 
     def __init__(self,

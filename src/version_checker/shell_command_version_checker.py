@@ -11,6 +11,8 @@ class ShellCommandVersionChecker(VersionChecker):
                  command: str,
                  name_regex: Optional[str] = None) -> None:
         """ Set configuration values """
+        super().__init__()
+
         self.command = command
         self.name_regex = name_regex
 

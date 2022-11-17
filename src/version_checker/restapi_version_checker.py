@@ -15,6 +15,8 @@ class RestAPIVersionChecker(VersionChecker):
                  authentication: Optional[dict] = None,
                  extra_headers: Optional[dict] = None) -> None:
         """ Set configuration values """
+        super().__init__()
+
         self.method = method
         self.https = https
         self.server = server
@@ -35,12 +37,20 @@ class RestAPIVersionChecker(VersionChecker):
                 headers.update(
                     {'Authorization': f'Token {self.authentication["token"]}'})
 
+        # Check if this is already cached
+        cache_key = f'{self.method}_{url}_{self.authentication["token"]}'
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+
         # Run the request
         # TODO: Error reporting (try/except)
         request = requests.request(
             method=self.method,
             url=url,
             headers=headers)
+
+        # Add it to the cache
+        self.cache[cache_key] = request
 
         # Return the Request object
         return request

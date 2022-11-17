@@ -13,6 +13,7 @@ class GitHubVersionChecker(VersionChecker):
                  repository: bool,
                  token: str) -> None:
         """ Set configuration values """
+        super().__init__()
 
         self.owner = owner
         self.repository = repository

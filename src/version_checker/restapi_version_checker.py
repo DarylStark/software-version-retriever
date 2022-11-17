@@ -38,8 +38,8 @@ class RestAPIVersionChecker(VersionChecker):
                     {'Authorization': f'Token {self.authentication["token"]}'})
 
         # Check if this is already cached
-        cache_key = f'{self.method}_{url}_{self.authentication["token"]}'
-        if cache_key in self.cache:
+        cache_key = f'RestAPIVersionChecker_{self.method}_{url}_{self.authentication["token"]}'
+        if cache_key in self.cache.keys():
             return self.cache[cache_key]
 
         # Run the request

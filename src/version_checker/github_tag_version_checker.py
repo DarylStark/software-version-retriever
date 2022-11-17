@@ -20,8 +20,14 @@ class GitHubTagVersionChecker(GitHubVersionChecker):
     def retrieve_version(self) -> str:
         """ Retrieve the version """
 
-        # Get the releases
-        tags = self.repository_object.get_tags()
+        # Check if this is already cached
+        cache_key = f'GitHubTagVersionChecker_{self.owner}_{self.repository}'
+        if cache_key in self.cache.keys():
+            tags = self.cache[cache_key]
+        else:
+            # Get the releases
+            tags = self.repository_object.get_tags()
+            self.cache[cache_key] = tags
 
         # Get the latests release-name
         latest_tag_name = tags[0].name

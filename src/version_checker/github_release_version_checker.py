@@ -20,8 +20,14 @@ class GitHubReleaseVersionChecker(GitHubVersionChecker):
     def retrieve_version(self) -> str:
         """ Retrieve the version """
 
-        # Get the releases
-        releases = self.repository_object.get_releases()
+        # Check if this is already cached
+        cache_key = f'GitHubReleaseVersionChecker{self.owner}_{self.repository}'
+        if cache_key in self.cache.keys():
+            releases = self.cache[cache_key]
+        else:
+            # Get the releases
+            releases = self.repository_object.get_releases()
+            self.cache[cache_key] = releases
 
         # Get the latests release-name
         latest_release_name = releases[0].name

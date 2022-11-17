@@ -26,8 +26,12 @@ class GitHubTagVersionChecker(GitHubVersionChecker):
             tags = self.cache[cache_key]
         else:
             # Get the tags
-            tags = self.repository_object.get_tags()
-            self.cache[cache_key] = tags
+            try:
+                tags = self.repository_object.get_tags()
+                self.cache[cache_key] = tags
+            except AttributeError:
+                self.logger.error('Not able to retrieve tags')
+                return None
 
         # Get the latests release-name
         latest_tag_name = tags[0].name

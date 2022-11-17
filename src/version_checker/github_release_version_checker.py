@@ -2,7 +2,7 @@ import requests
 import re
 from .github_version_checker import GitHubVersionChecker
 from typing import Optional
-from github_api import GitHub
+import logging
 
 
 class GitHubReleaseVersionChecker(GitHubVersionChecker):
@@ -16,6 +16,7 @@ class GitHubReleaseVersionChecker(GitHubVersionChecker):
         super().__init__(**kwargs)
         self.name_regex = name_regex
         self.replace_underscores = replace_underscores
+        self.logger = logging.getLogger('GitHubReleaseVersionChecker')
 
     def retrieve_version(self) -> str:
         """ Retrieve the version """
@@ -26,8 +27,12 @@ class GitHubReleaseVersionChecker(GitHubVersionChecker):
             releases = self.cache[cache_key]
         else:
             # Get the releases
-            releases = self.repository_object.get_releases()
-            self.cache[cache_key] = releases
+            try:
+                releases = self.repository_object.get_releases()
+                self.cache[cache_key] = releases
+            except AttributeError:
+                self.logger.error('Not able to retrieve releases')
+                return None
 
         # Get the latests release-name
         latest_release_name = releases[0].name

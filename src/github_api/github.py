@@ -106,6 +106,10 @@ class GitHub:
     def get_repository(self, owner: str, repository: str) -> Repository:
         """ Retrieve a repository """
         response = self.api_call(f'repos/{owner}/{repository}')
+
+        if response is None:
+            return None
+
         data = response.json()
 
         # Create a Repository object

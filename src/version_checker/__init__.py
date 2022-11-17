@@ -4,6 +4,7 @@ from .version_checker import VersionChecker
 # Classes to retrieve from REST APIs
 from .restapi_version_checker import RestAPIVersionChecker
 from .restapi_json_version_checker import RestAPIJSONVersionChecker
+from .restapi_html_version_checker import RestAPIHTMLVersionChecker
 
 # Classes to retrieve from GitHub
 from .github_version_checker import GitHubVersionChecker

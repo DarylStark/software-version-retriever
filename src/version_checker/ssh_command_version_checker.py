@@ -1,3 +1,4 @@
+from typing import Optional
 from .shell_command_version_checker import ShellCommandVersionChecker
 import paramiko
 

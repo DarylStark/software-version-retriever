@@ -1,6 +1,7 @@
 import subprocess
 from .github_version_checker import GitHubVersionChecker
 from typing import Optional
+import re
 
 
 class ShellCommandVersionChecker(GitHubVersionChecker):
@@ -20,7 +21,13 @@ class ShellCommandVersionChecker(GitHubVersionChecker):
 
     def retrieve_version(self) -> str:
         """ Retrieve the version """
-        output = self.get_command_output()
+        latest_release_name = self.get_command_output()
 
-        # TODO: Parse name_regex
-        return output
+        # Run the regex
+        if self.name_regex:
+            matches = re.findall(self.name_regex, latest_release_name)
+            if len(matches) == 1:
+                latest_release_name = matches[0]
+
+        # Return the version
+        return latest_release_name

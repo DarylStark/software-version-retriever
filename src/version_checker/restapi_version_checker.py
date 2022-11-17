@@ -32,10 +32,18 @@ class RestAPIVersionChecker(VersionChecker):
         headers = None
         if self.extra_headers:
             headers = self.extra_headers.copy()
+
+        # Create session for requests
+        session = requests.Session()
+
         if self.authentication:
             if self.authentication['type'] == 'token':
                 headers.update(
                     {'Authorization': f'Token {self.authentication["token"]}'})
+            elif self.authentication['type'] == 'basic':
+                # Configure request for basic authentication
+                session.auth = (self.authentication['user'],
+                                self.authentication['pass'])
 
         # Check if this is already cached
         cache_key = f'RestAPIVersionChecker_{self.method}_{url}'
@@ -44,7 +52,7 @@ class RestAPIVersionChecker(VersionChecker):
 
         # Run the request
         # TODO: Error reporting (try/except)
-        request = requests.request(
+        request = session.request(
             method=self.method,
             url=url,
             headers=headers)

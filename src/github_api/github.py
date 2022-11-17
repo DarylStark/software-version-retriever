@@ -78,7 +78,7 @@ class GitHub:
         self.api_key = api_key
         self.session = requests.Session()
 
-    def api_call(self, endpoint: str, method: str = 'GET', data: Optional[dict] = None) -> Optional[dict]:
+    def api_call(self, endpoint: str, method: str = 'GET', data: Optional[dict] = None) -> Optional[requests.Response]:
         """ Run a API call to GitHub """
 
         # Prepare the request
@@ -88,7 +88,10 @@ class GitHub:
 
         # Run the request
         # TODO: Error reporting (try/except)
-        return self.session.send(prepared_request)
+        response = self.session.send(prepared_request)
+        if response.status_code == 200:
+            return response
+        return None
 
     def get_repository(self, owner: str, repository: str) -> Repository:
         """ Retrieve a repository """

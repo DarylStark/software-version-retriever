@@ -32,12 +32,17 @@ class Repository(ConnectedObject):
     id: int
     node_id: str
 
-    def get_releases(self) -> List[Release]:
+    def get_releases(self) -> Optional[List[Release]]:
         """ Method to get the releases for this specific repo """
 
         releases = self._github_connection.api_call(
             f'repos/{self.owner}/{self.name}/releases'
-        ).json()
+        )
+
+        if releases is None:
+            return None
+
+        releases = releases.json()
 
         # Convert it to 'Release' objects
         resources = [
@@ -51,12 +56,17 @@ class Repository(ConnectedObject):
         # Return it
         return resources
 
-    def get_tags(self) -> List[Release]:
+    def get_tags(self) -> Optional[List[Tag]]:
         """ Method to get the releases for this specific repo """
 
         tags = self._github_connection.api_call(
             f'repos/{self.owner}/{self.name}/tags?per_page=100'
-        ).json()
+        )
+
+        if tags is None:
+            return None
+
+        tags = tags.json()
 
         # Convert it to 'Tag' objects
         resources = [

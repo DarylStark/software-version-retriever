@@ -23,7 +23,7 @@ class RestAPIVersionChecker(VersionChecker):
         self.authentication = authentication
         self.extra_headers = extra_headers
 
-    def api_call(self) -> requests.Response:
+    def api_call(self) -> Optional[requests.Response]:
         """ Method to do the API call """
 
         # Define the properties
@@ -57,8 +57,10 @@ class RestAPIVersionChecker(VersionChecker):
             url=url,
             headers=headers)
 
-        # Add it to the cache
-        self.cache[cache_key] = request
+        if request.status_code == 200:
+            # Add it to the cache
+            self.cache[cache_key] = request
 
-        # Return the Request object
-        return request
+            # Return the Request object
+            return request
+        return None

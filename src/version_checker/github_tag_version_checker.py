@@ -25,7 +25,7 @@ class GitHubTagVersionChecker(GitHubVersionChecker):
         if cache_key in self.cache.keys():
             tags = self.cache[cache_key]
         else:
-            # Get the releases
+            # Get the tags
             tags = self.repository_object.get_tags()
             self.cache[cache_key] = tags
 

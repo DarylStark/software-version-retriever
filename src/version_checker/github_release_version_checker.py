@@ -21,7 +21,7 @@ class GitHubReleaseVersionChecker(GitHubVersionChecker):
         """ Retrieve the version """
 
         # Check if this is already cached
-        cache_key = f'GitHubReleaseVersionChecker{self.owner}_{self.repository}'
+        cache_key = f'GitHubReleaseVersionChecker_{self.owner}_{self.repository}'
         if cache_key in self.cache.keys():
             releases = self.cache[cache_key]
         else:

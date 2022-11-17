@@ -1,8 +1,7 @@
-import requests
 import re
 from .github_version_checker import GitHubVersionChecker
 from typing import Optional
-from github_api import GitHub
+import logging
 
 
 class GitHubTagVersionChecker(GitHubVersionChecker):
@@ -16,6 +15,7 @@ class GitHubTagVersionChecker(GitHubVersionChecker):
         super().__init__(**kwargs)
         self.name_regex = name_regex
         self.replace_underscores = replace_underscores
+        self.logger = logging.getLogger('GitHubTagVersionChecker')
 
     def retrieve_version(self) -> str:
         """ Retrieve the version """

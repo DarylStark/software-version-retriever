@@ -1,4 +1,3 @@
-import requests
 import re
 from .github_version_checker import GitHubVersionChecker
 from typing import Optional
